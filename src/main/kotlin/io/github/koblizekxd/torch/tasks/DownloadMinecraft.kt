@@ -26,10 +26,11 @@ abstract class DownloadMinecraft : DefaultTask() {
         println("[Torch] Downloading Json source...")
         json = Gson().fromJson(Download(url, temporaryDir, "minecraft-json.json").file.readText(), JsonObject::class.java)
         println("[Torch] Finished downloading json source")
+        downloadSource()
     }
 
-    @TaskAction
-    fun downloadSource() {
+    private fun downloadSource() {
+
         println("[Torch] Downloading minecraft client jar...")
          val url = json.getAsJsonObject("downloads")
             .getAsJsonObject("client")
@@ -37,9 +38,9 @@ abstract class DownloadMinecraft : DefaultTask() {
             .asString
         Download(url, temporaryDir, "client.jar")
         println("[Torch] Finished downloading minecraft client jar")
+        downloadLibraries()
     }
-    @TaskAction
-    fun downloadLibraries() {
+    private fun downloadLibraries() {
         println("[Torch] Preparing to download libraries...")
         val libraries = json.getAsJsonObject("libraries")
 
