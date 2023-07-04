@@ -1,10 +1,7 @@
-import io.github.koblizekxd.torch.minecraft
-
 plugins {
     kotlin("jvm") version "1.8.0"
     id("maven-publish")
     id("java-gradle-plugin")
-    id("torch-loader") version "1.0"
 }
 
 group = "io.github.koblizekxd"
@@ -15,15 +12,10 @@ repositories {
     mavenLocal()
 }
 
-minecraft {
-    version = "1.19.2"
-    mappings = "official"
-}
-
 dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation(gradleApi())
-    implementation("torch-loader:torch-loader.gradle.plugin:1.0")
+    // implementation("torch-loader:torch-loader.gradle.plugin:1.0")
 
     testImplementation(kotlin("test"))
 }
