@@ -42,18 +42,18 @@ abstract class DownloadMinecraft : DefaultTask() {
     }
     private fun downloadLibraries() {
         println("[Torch] Preparing to download libraries...")
-        val libraries = json.getAsJsonObject("libraries")
+        val libraries = json.getAsJsonArray("libraries")
 
         for (i in 0..libraries.size()) {
-            val url = libraries.getAsJsonObject(i.toString()).getAsJsonObject("downloads")
+            val url = libraries[i].asJsonObject.getAsJsonObject("downloads")
                 .getAsJsonObject("artifact")
                 .getAsJsonPrimitive("url")
                 .asString
-            if (!canUse(libraries.getAsJsonObject(i.toString()))) continue
-            println("[Torch] Downloading ${libraries.getAsJsonObject(i.toString()).getAsJsonPrimitive("name").asString}...")
-            val file = Download(url, temporaryDir, libraries.getAsJsonObject(i.toString()).getAsJsonPrimitive("name").asString)
+            if (!canUse(libraries[i].asJsonObject)) continue
+            println("[Torch] Downloading ${libraries[i].asJsonObject.getAsJsonPrimitive("name").asString}...")
+            val file = Download(url, temporaryDir, libraries[i].asJsonObject.getAsJsonPrimitive("name").asString)
                 .file
-            if (!isNative(libraries.getAsJsonObject(i.toString())))
+            if (!isNative(libraries[i].asJsonObject))
                 project.dependencies.add("implementation", project.files(file))
             else project.dependencies.add("runtimeOnly", project.files(file))
             println("[Torch] Done")
