@@ -4,7 +4,7 @@ class MinecraftProject {
     /**
      * Specifies the mapping type, different version can have different mappings,
      * we currently support these mapping types:
-     * - 1.18.2 -  official
+     * - 1.19.2 -  official
      */
     lateinit var mappings: String
 
