@@ -13,7 +13,13 @@ class TorchPlugin : Plugin<Project> {
     fun minecraft(proj: MinecraftProject.() -> Unit) {
         val mc = MinecraftProject()
         proj(mc)
-        val x: Json
         // Stuff is stored in the mc variable
+        mappings = mc.mappings
+        version = mc.version
+    }
+
+    companion object {
+        lateinit var mappings: String
+        lateinit var version: String
     }
 }
