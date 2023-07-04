@@ -38,6 +38,8 @@ gradlePlugin {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
+            groupId = "io.github.koblizekxd"
+            artifactId = "torch-loader"
             from(components["java"])
         }
     }
