@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation(gradleApi())
     // implementation("torch-loader:torch-loader.gradle.plugin:1.0")
 
