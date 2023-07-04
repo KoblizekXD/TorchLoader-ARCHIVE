@@ -38,4 +38,22 @@ abstract class DownloadMinecraft : DefaultTask() {
         Download(url, temporaryDir, "client.jar")
         println("[Torch] Finished downloading minecraft client jar")
     }
+    @TaskAction
+    fun downloadLibraries() {
+        println("[Torch] Preparing to download libraries...")
+        val libraries = json.getAsJsonObject("libraries")
+
+        for (i in 0..libraries.size()) {
+            val url = libraries.getAsJsonObject("downloads")
+                .getAsJsonObject("artifact")
+                .getAsJsonPrimitive("url")
+                .asString
+            println("[Torch] Downloading ${libraries.getAsJsonPrimitive("name").asString}...")
+            val file = Download(url, temporaryDir, libraries.getAsJsonPrimitive("name").asString)
+                .file
+
+            project.dependencies.add("implementation", project.files(file))
+            println("[Torch] Done")
+        }
+    }
 }
