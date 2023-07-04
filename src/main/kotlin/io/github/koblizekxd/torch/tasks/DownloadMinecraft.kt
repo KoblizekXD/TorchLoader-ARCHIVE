@@ -52,12 +52,13 @@ abstract class DownloadMinecraft : DefaultTask() {
             println("[Torch] Downloading ${libraries.getAsJsonObject(i.toString()).getAsJsonPrimitive("name").asString}...")
             val file = Download(url, temporaryDir, libraries.getAsJsonObject(i.toString()).getAsJsonPrimitive("name").asString)
                 .file
-
-            project.dependencies.add("implementation", project.files(file))
+            if (!isNative(libraries.getAsJsonObject(i.toString())))
+                project.dependencies.add("implementation", project.files(file))
+            else project.dependencies.add("runtimeOnly", project.files(file))
             println("[Torch] Done")
         }
     }
-    fun canUse(json: JsonObject): Boolean {
+    private fun canUse(json: JsonObject): Boolean {
         val os = json.getAsJsonObject("rules") ?: return true
         val osname = os.getAsJsonObject("0").getAsJsonObject("os")
         .getAsJsonObject("name").asString
@@ -66,5 +67,8 @@ abstract class DownloadMinecraft : DefaultTask() {
         } else if (SystemUtils.IS_OS_LINUX && osname == "linux") {
             true
         } else SystemUtils.IS_OS_MAC && osname == "osx"
+    }
+    private fun isNative(json: JsonObject): Boolean {
+        return json.has("rules")
     }
 }
