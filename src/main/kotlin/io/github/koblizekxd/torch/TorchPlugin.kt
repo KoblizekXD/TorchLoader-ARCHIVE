@@ -2,12 +2,14 @@ package io.github.koblizekxd.torch
 
 import io.github.koblizekxd.torch.minecraft.MinecraftProject
 import io.github.koblizekxd.torch.tasks.DownloadMinecraft
+import io.github.koblizekxd.torch.tasks.GradleDownloadMinecraft
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class TorchPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.tasks.create("downloadMinecraft", DownloadMinecraft::class.java)
+        project.tasks.create("gradleDownloadMinecraft", GradleDownloadMinecraft::class.java)
     }
 
     companion object {

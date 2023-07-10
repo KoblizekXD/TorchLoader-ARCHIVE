@@ -19,6 +19,7 @@ dependencies {
     // implementation("torch-loader:torch-loader.gradle.plugin:1.0")
 
     testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 }
 
 tasks.test {

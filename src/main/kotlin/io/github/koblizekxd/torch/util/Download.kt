@@ -9,7 +9,7 @@ class Download(url: String, temp: File, name: String) {
 
     init {
         val uri = URL(url)
-        file = File(temp, name)
+        file = File(temp, name.replace(":", ""))
         uri.openStream().use { input ->
             file.outputStream().use { output ->
                 input.copyTo(output)
