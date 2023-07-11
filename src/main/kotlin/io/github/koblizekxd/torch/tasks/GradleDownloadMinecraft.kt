@@ -7,6 +7,7 @@ import io.github.koblizekxd.torch.util.Download
 import org.apache.commons.lang3.SystemUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import java.io.File
 
 abstract class GradleDownloadMinecraft : DefaultTask() {
     private lateinit var json: JsonObject
@@ -14,22 +15,11 @@ abstract class GradleDownloadMinecraft : DefaultTask() {
     init {
         group = "torch"
         description = "Downloads main minecraft jar and json file through gradle"
+        dependsOn.add(TorchPlugin.downloadMinecraftJson)
     }
-
     @TaskAction
-    protected fun downloadJsonSource() {
-        val url: String
-
-        if (TorchPlugin.version == "1.19.2") {
-            url = "https://piston-meta.mojang.com/v1/packages/ed548106acf3ac7e8205a6ee8fd2710facfa164f/1.19.2.json"
-        } else throw RuntimeException("Unsupported version or null: ${TorchPlugin.version}")
-        println("[Torch] Downloading Json source...")
-        json = Gson().fromJson(Download(url, temporaryDir, "minecraft-json.json").file.readText(), JsonObject::class.java)
-        println("[Torch] Finished downloading json source")
-        downloadSource()
-    }
     private fun downloadSource() {
-
+        json = Gson().fromJson(File(temporaryDir.path + "/minecraft-json.json").readText(), JsonObject::class.java)
         println("[Torch] Downloading minecraft client jar...")
         val url = json.getAsJsonObject("downloads")
             .getAsJsonObject("client")
