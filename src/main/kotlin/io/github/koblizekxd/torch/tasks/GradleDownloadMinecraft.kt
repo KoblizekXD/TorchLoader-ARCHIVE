@@ -51,9 +51,7 @@ abstract class GradleDownloadMinecraft : DefaultTask() {
                 .asString
             if (!canUse(libraries[i].asJsonObject)) continue
             println("[Torch] Downloading ${libraries[i].asJsonObject.getAsJsonPrimitive("name").asString}...")
-            if (!isNative(libraries[i].asJsonObject))
-                project.dependencies.add("implementation", url)
-            else project.dependencies.add("runtimeOnly", url)
+            TorchPlugin.dependencies[url] = isNative(libraries[i].asJsonObject)
             println("[Torch] Done")
         }
     }
