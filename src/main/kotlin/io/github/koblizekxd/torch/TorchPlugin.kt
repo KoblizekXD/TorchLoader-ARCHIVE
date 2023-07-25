@@ -9,6 +9,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.DependencyResolutionListener
 import org.gradle.api.artifacts.ResolvableDependencies
+import org.gradle.api.plugins.JavaPlugin
 
 class TorchPlugin : Plugin<Project> {
 
@@ -42,21 +43,26 @@ class TorchPlugin : Plugin<Project> {
         downloadMinecraftJson = project.tasks.create("downloadMinecraftJson", DownloadMinecraftJson::class.java)
         downloadMinecraft = project.tasks.create("downloadMinecraft", DownloadMinecraft::class.java)
         gradleDownloadMinecraft = project.tasks.create("gradleDownloadMinecraft", GradleDownloadMinecraft::class.java)
+        project.repositories.add(project.repositories.maven {
+            it.url = project.uri("https://libraries.minecraft.net")
+        })
+        val mcImpl = project.configurations.create("mcImpl")
+        val mcRunt = project.configurations.create("mcRunt")
         project.afterEvaluate {
             if (dependencies.isNotEmpty()) {
-                val deps = project.configurations.getByName("implementation").dependencies
-                val runtimeDeps = project.configurations.getByName("runtimeOnly").dependencies
                 dependencies.forEach {
                     println("Applying dependency: ${it.key}")
                     if (it.value) {
-                        project.dependencies.add("runtimeOnly", it.key)
-                        //runtimeDeps.add(project.dependencies.create(it.key))
+                        //project.dependencies.add("runtimeOnly", it.key)
+                        mcRunt.dependencies.add(project.dependencies.create(it.key))
                     } else {
-                        project.dependencies.add("implementation", it.key)
-                        //deps.add(project.dependencies.create(it.key))
+                        //project.dependencies.add("implementation", it.key)
+                        mcImpl.dependencies.add(project.dependencies.create(it.key))
                     }
                 }
                 dependencies.clear()
+                project.configurations.getByName("implementation").extendsFrom(mcImpl)
+                project.configurations.getByName("runtimeOnly").extendsFrom(mcRunt)
             }
         }
     }
